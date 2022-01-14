@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Weather</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!--<style>
+		/* Set the size of the div element that contains the map */
+		#map {
+			height: 400px;
+			/* The height is 400 pixels */
+			width: 100%;
+			/* The width is the width of the web page */
+		}
+	</style> -->
+	<script th:inline="javascript">
+		// Initialize and add the map
+		function initMap() {
+			// The location of Uluru
+			const uluru = {lat: /*[[${session.lat}]]*/"", lng: /*[[${session.lon}]]*/""};
+			
+			// The map, centered at Uluru
+			const map = new google.maps.Map(document.getElementById("map"), {
+				zoom: 15,
+				center: uluru,
+			});
+			// The marker, positioned at Uluru
+			const marker = new google.maps.Marker({
+				position: uluru,
+				map: map,
+			});
+		}
+	</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-light bg-light justify-content-between">
+		<a class="navbar-brand">Weather App</a>
+		<form class="form-inline" th:attr="action=@{/search}" method="GET">
+			<input class="form-control mr-sm-2" type="search" name="q" placeholder="Search" aria-label="Search">
+			<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		</form>
+	</nav>
+	<div class="container">
+
+		<div class="card" style="width: 18rem;" th:each="l: ${location}">
+			<div class="card-body ">
+				<h5 class="card-title" th:text="${l.name}">Card title</h5>
+				<p class="card-text" th:text="${l.region}">Some quick example text to build on the card title and
+					make up the bulk of the card's
+					content.</p>
+				<span class="badge badge-success" th:text=${l.country}></span>
+				<span class="badge badge-success"></span>
+
+			</div>
+		</div>
+		<div class="card" style="width: 18rem;" th:each="c: ${current}">
+			<div class="card-body ">
+
+				<p class="badge badge-success">Temperature</p>
+				<h5 class="badge badge-success" th:text="${c.temp_c}"></h5>
+				<p class="badge badge-success">Humidity</p>
+				<p class="badge badge-success" th:text="${c.humidity}">Some quick example text to build on the card
+					title and
+					make up the bulk of the card's
+					content.</p>
+
+			</div>
+		</div>
+		<div class="card" style="width: 18rem;" th:each="cd: ${condition}">
+			<div class=" card-body ">
+				<h5  class=" badge badge-success" th:text="${cd.text}">Card title</h5>
+			<img class="img-thumbnail" th:src="${cd.icon}" alt="Card image cap">
+
+		</div>
+	</div>
+	<div id="map"class="z-depth-1-half map-container" style="height: 500px">
+
+	<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
+	<script
+		src="https://maps.googleapis.com/maps/api/js?API-KEY&callback=initMap&libraries=&v=weekly"
+		async></script>
+	</div>
+	</div>
+</body>
+
+</html>
